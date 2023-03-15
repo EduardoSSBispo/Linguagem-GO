@@ -3,4 +3,4 @@ A GoLang, mais conhecida como Go, é uma linguagem de programação de código a
 
 Elaboração da Documentação Léxica - [Linguagem GO - Elementos Léxicos.pdf](https://github.com/EduardoSSBispo/Linguagem-GO/files/10949105/Linguagem.GO.-.Elementos.Lexicos.pdf)
 
-Elaboração do Léxico em PLY - [AnaliseLexica.py](https://github.com/EduardoSSBispo/Linguagem-GO/files/AnaliseLexica.py)
+Elaboração do Léxico em PLY - [AnaliseLexica.py](https://github.com/EduardoSSBispo/Linguagem-GO/blob/97837e9f6af4c7cab33676d047e6b6daa36633da/AnaliseLexica.py)
