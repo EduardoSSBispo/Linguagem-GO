@@ -1,5 +1,14 @@
 import ply.lex as lex
 
+def space_counter(token):
+    spaces = 0
+    for c in token.value:
+        if c == ' ':
+            spaces += 1
+        elif c == '\t':
+            spaces += 8 - (spaces % 8)
+    return spaces
+
 reservadas = {
   'float' : 'FLOAT', 
   'int' : 'INT', 
@@ -34,7 +43,7 @@ reservadas = {
   'false':'FALSE'
 }
 
-tokens = ['SOMA', 'SUBTRACAO', 'ASTERISCO', 'DIVISAO', 'ID', 'INTEIRO', 'FLUTUANTE', 'FLUTUANTEDOBRO', 'IGUAL', 'DIFERENTE', 'MAIORQUE', 'MENORQUE', 'MAIORIGUAL', 'MENORIGUAL', 'CONJUNCAO', 'MODULO', 'DISJUNCAO', 'ATRIBUICAO', 'ATRIBUICAOSOMA', 'ATRIBUICAOMULT', 'ATRIBUICAOSUB', 'ATRIBUICAODIV', 'ATRIBUICAOMOD', 'ATRIBUICAOPONTO', 'LPAREN', 'RPAREN', 'LCHAVE', 'RCHAVE', 'LCOLCHETE', 'RCOLCHETE', 'VIRGULA', 'PVIRGULA', 'PONTO', 'DOISPONTOS', 'PALAVRA', 'COMENTARIO', 'ENDERECO']  + list(reservadas.values())
+tokens = ['SOMA', 'SUBTRACAO', 'ASTERISCO', 'DIVISAO', 'ID', 'INTEIRO', 'FLUTUANTE', 'FLUTUANTEDOBRO', 'IGUAL', 'DIFERENTE', 'MAIORQUE', 'MENORQUE', 'MAIORIGUAL', 'MENORIGUAL', 'CONJUNCAO', 'MODULO', 'DISJUNCAO', 'ATRIBUICAO', 'ATRIBUICAOSOMA', 'ATRIBUICAOMULT', 'ATRIBUICAOSUB', 'ATRIBUICAODIV', 'ATRIBUICAOMOD', 'ATRIBUICAOPONTO', 'LPAREN', 'RPAREN', 'LCHAVE', 'RCHAVE', 'LCOLCHETE', 'RCOLCHETE', 'VIRGULA', 'PVIRGULA', 'PONTO', 'DOISPONTOS', 'PALAVRA', 'COMENTARIO', 'ENDERECO', 'LINHA', 'IDENT', 'DEDENT']  + list(reservadas.values())
 
 t_SOMA = r'\+'
 t_SUBTRACAO = r'-'
@@ -68,8 +77,68 @@ t_PVIRGULA = r';'
 t_PONTO = r'\.'
 t_DOISPONTOS = r':'
 t_PALAVRA = r'"(.*?)"'
+t_ignore = ' '
 
-t_ignore = ' \t\n'
+stack = [0]
+states = (('idstate', 'exclusive'),
+          ('dedstate', 'exclusive'),)
+t_LINHA = '[a-zA-Z][a-zA-Z \t]+'
+
+def t_breakline(t):
+    r'\n+'                                 #Reconhece uma ou mais quebras de linha
+    t.lexer.lineno += len(t.value) 
+    t.lexer.begin('idstate')
+
+def t_idstate_blankline(t):
+    r'([ \t]+)\n'                           #Reconhece uma linha em branco
+    # print('t_idstate_blankline')
+    pass
+
+def t_idstate_linewithcode(t):
+    '([ \t]+) | ([a-zA-Z{}])'                 #Reconhece espaços em brancos e tabulações ou uma palavra
+    # print('t_idstate_linewithcode')
+    n_spaces = space_counter(t)
+    t.lexer.begin('INITIAL')
+    if n_spaces < stack[-1]:
+        t.lexer.skip(-len(t.value))
+        stack.pop()
+        t.type='DEDENT'
+        t.lexer.begin('dedstate')
+        return t
+    elif n_spaces > stack[-1]:
+        stack.append(n_spaces)
+        t.type='IDENT'
+        return t
+    elif n_spaces == 0:
+        t.lexer.skip(-1)
+
+def t_dedstate_linewithdedent(t):
+    '([ \t]+) | ([a-zA-Z{}])'                 #Reconhece espaços em brancos e tabulações ou uma palavra
+    n_spaces = space_counter(t)
+    if n_spaces < stack[-1]:
+        t.lexer.skip(-len(t.value))
+        stack.pop()
+        t.type='DEDENT'
+        return t
+    elif n_spaces >= stack[-1]:  
+        t.lexer.begin('INITIAL')
+        if n_spaces > stack[-1]:
+            print('Erro de dedentação --->', n_spaces)
+        elif n_spaces == 0:                  # Se o elemento começar com uma palavra
+            t.lexer.skip(-1)
+
+def t_error(t):
+    print("ERROR in INITIAL state")
+    print(t.value)
+    t.lexer.skip(1)
+
+def t_idstate_error(t):
+    print("ERROR in idstate state")
+    t.lexer.skip(1)
+
+def t_dedstate_error(t):
+    print("ERROR in dedstate state")
+    t.lexer.skip(1)
 
 def t_FLUTUANTE(t):
   r'[-]?[0-9]+[.][0-9]+'
@@ -90,17 +159,13 @@ def t_COMENTARIO(t):
   r'(//.*)|(/\*(.|\n)*?\*/)'
   pass
 
-def t_error(t):
-  print('Error', t.value)
-  t.lexer.skip(1)
-
-def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
+#def t_newline(t):
+ #   r'\n+'
+  #  t.lexer.lineno += len(t.value)
 
 lexer = lex.lex()
 #lexer.input('for j:= 0; j<= 2; j--{ -38.2 - 123}')
-lexer.input('func main() { <- r := rect{width: 10*5, height: 5}\nrp := &&r\n fmt.Println("area: ", rp.area())\n fmt.Println("perim:", rp.perim())} ')
+lexer.input('package main\nimport "fmt"\nfunc mais(a int, b int) int {\n  return a + b\n}\nfunc main() {\n   res := mais(1, 2)\n   fmt.Println("1+2=", res)\n}')
 
 for tok in lexer:
   print(tok.value, tok.type)
