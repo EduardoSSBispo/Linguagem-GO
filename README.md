@@ -5,7 +5,7 @@ Elaboração da Documentação Léxica - [Linguagem GO - Elementos Léxicos.pdf]
 
 Elaboração do Léxico em PLY - [AnaliseLexica.py](https://github.com/EduardoSSBispo/Linguagem-GO/blob/87fa115575ef634c0ddd7b876de2c4cf11f8f32b/AnaliseLexica.py)
 
-Elaboração da Documentação Sintática - [Gramática Golang.pdf](https://github.com/EduardoSSBispo/Linguagem-GO/blob/d7ce2e106bff52339d3e019d08380dc9182ecfcd/Gram%C3%A1tica%20Golang.pdf)
+Elaboração da Documentação Sintática - [Gramática Golang.pdf](https://github.com/EduardoSSBispo/Linguagem-GO/blob/5cd41108375dba854f07a3196818d38fbc8d2957/Gram%C3%A1tica%20Golang.pdf)
 
 Elaboração do Sintático em PLY - [AnaliseSintatica.py](https://github.com/EduardoSSBispo/Linguagem-GO/blob/87fa115575ef634c0ddd7b876de2c4cf11f8f32b/AnaliseSintatica.py)
 
