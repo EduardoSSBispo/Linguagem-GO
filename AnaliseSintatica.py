@@ -1,18 +1,23 @@
 import ply.yacc as yacc
 from AnaliseLexica import *
+import AnaliseAbstrata as sa
 
 precedence = (
   ('left', 'CONJUNCAO', 'DISJUNCAO', 'DIFERENTE'),
   ('nonassoc', 'MAIORQUE', 'MENORQUE', 'IGUAL', 'MAIORIGUAL', 'MENORIGUAL', 'MODULO'),
   ('left', 'ATRIBUICAO', 'ATRIBUICAOSOMA', 'ATRIBUICAOSUB', 'ATRIBUICAOMULT', 'ATRIBUICAODIV', 'ATRIBUICAOMOD', 'ATRIBUICAOPONTO'),
   ('left', 'SOMA', 'SUBTRACAO'),
-  ('left', 'ASTERISCO', 'DIVISAO')
+  ('left', 'ASTERISCO', 'DIVISAO'),
+  ('left', 'LPAREN', 'LCHAVE', 'LCOLCHETE', 'RPAREN', 'RCHAVE', 'RCOLCHETE')
 )
 
 def p_programa(p):
   '''programa : declaration 
               | programa declaration'''
-  pass
+  if (len(p) == 3):
+    p[0] = [p[1]] + p[2]
+  else:
+    p[0] = [p[1]]
   
 def p_declaration(p):
   '''declaration : declarationvar PVIRGULA 
@@ -35,7 +40,10 @@ def p_declarationfunc(p):
   pass
   
 def p_assinatura(p):
-  '''assinatura : LPAREN listaparam RPAREN tipo'''
+  '''assinatura : LPAREN listaparam RPAREN tipo
+                | LPAREN listaparam RPAREN
+                | LPAREN RPAREN tipo
+                | LPAREN RPAREN'''
   pass
   
 def p_listaparam(p):
@@ -102,12 +110,25 @@ def p_listaexp(p):
   '''listaexp : expbinaria 
               | expatribui'''
   pass
-  
+
 def p_expbinaria(p):
-  '''expbinaria : terminal operadorbinario expbinaria 
-                | call'''
+  '''expbinaria : abreexp terminal operadorbinario expbinaria fechaexp
+                | terminal operadorbinario expbinaria 
+                | call
+                | terminal'''
   pass
 
+def p_abreexp(p):
+  '''abreexp : LCOLCHETE
+              | LPAREN
+              | LCHAVE'''
+
+def p_fechaexp(p):
+  '''fechaexp : RCOLCHETE
+              | RPAREN
+              | RCHAVE'''
+
+  
 def p_expatribui(p):
   '''expatribui :  ID operadoratribuicao expbinaria'''
   pass
@@ -122,7 +143,7 @@ def p_operadoratribuicao(p):
                         | ATRIBUICAOPONTO'''
   pass
 
-def p_operadorbinario(p):
+def p_operadorbinario(p): #P[0] = P[1]
   '''operadorbinario : SOMA
                      | ASTERISCO 
                      | MODULO 
