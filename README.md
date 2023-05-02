@@ -13,4 +13,4 @@ Elaboração da Abstrata em PLY - [AnaliseAbstrata.py](https://github.com/Eduard
 
 Abstrata do Visitor - [VisitorAbstract](https://github.com/EduardoSSBispo/Linguagem-GO/blob/ee97724db4ff08b94feed5d21cc8bb0c9cb41190/abstractVisitor.py)
 
-Elaboração do Visitor em PLY - [Visitor](https://github.com/EduardoSSBispo/Linguagem-GO/blob/ee97724db4ff08b94feed5d21cc8bb0c9cb41190/Visitor.py)
+Elaboração do Visitor PrettyPrinter em PLY - [Visitor](https://github.com/EduardoSSBispo/Linguagem-GO/blob/ee97724db4ff08b94feed5d21cc8bb0c9cb41190/Visitor.py)
