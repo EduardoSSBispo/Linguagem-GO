@@ -1,6 +1,26 @@
 from abc import abstractmethod
 from abc import ABCMeta
 
+class Programa(metaclass = ABCMeta):
+  @abstractmethod
+  def accept(self, visitor):
+    pass 
+
+class ProgramaConcreto1(Programa):
+  def __init__(self, declaration):
+    self.declaration = declaration
+
+  def accept(self, visitor):
+    return visitor.visitProgramaConcreto1(self) 
+
+class ProgramaConcreto2(Programa):
+  def __init__(self, programa, declaration):
+    self.programa = programa
+    self.declaration = declaration
+
+  def accept(self, visitor):
+    return visitor.visitProgramaConcreto2(self) 
+    
 class Declaration(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, visitor):
@@ -31,6 +51,14 @@ class DeclaraVar(Declaration):
 
   def accept(self, visitor):
     return visitor.visitDeclaraVar(self)
+
+class DeclaraVar2(Declaration):
+  def __init__(self, declara):
+    self.declarationvar = declara
+
+  def accept(self, visitor):
+    return visitor.visitDeclaraVar2(self)
+    
 
 class DeclaraExpBinaria(Declaration):
   def __init__(self, id, expbinaria):
@@ -138,56 +166,49 @@ class Stm(metaclass = ABCMeta):
   @abstractmethod
   def accept(self, visitor):
     pass
-
-class stmConcreto(Stm):
-  def __init__(self, stm):
-    self.stm = stm
+    
+class StmListaExp(Stm):
+  def __init__(self, listaExp):
+    self.listaExp = listaExp
+    
   def accept(self, visitor):
-    return visitor.visitstmConcreto(self)
-    #Até aquiiiiii
-    
-# class StmListaExp(Stm):
-#   def __init__(self, listaExp):
-#     self.listaExp = listaExp
-    
-#   def accept(self, visitor):
-#     pass
+    return visitor.visitStmListaExp(self)
 
-# class StmDeclarationVar(Stm):
-#   def __init__(self, declarationVar):
-#     self.declarationVar = declarationVar
+class StmDeclarationVar(Stm):
+  def __init__(self, declarationVar):
+    self.declarationVar = declarationVar
     
-#   def accept(self, visitor):
-#     pass
+  def accept(self, visitor):
+    return visitor.visitStmDeclarationVar(self)
 
 
-# class StmDeclarationShort(Stm):
-#   def __init__(self, declarationVarShort):
-#     self.declarationVarShort = declarationVarShort
+class StmDeclarationShort(Stm):
+  def __init__(self, declarationVarShort):
+    self.declarationVarShort = declarationVarShort
     
-#   def accept(self, visitor):
-#     pass
+  def accept(self, visitor):
+    return visitor.visitStmDeclarationShort(self)
 
-# class StmIfstm(Stm):
-#   def __init__(self, ifStm):
-#     self.ifStm = ifStm
+class StmIfstm(Stm):
+  def __init__(self, ifStm):
+    self.ifStm = ifStm
     
-#   def accept(self, visitor):
-#     pass
+  def accept(self, visitor):
+    return visitor.visitStmIfstm(self)
 
-# class StmForstm(Stm):
-#   def __init__(self, forStm):
-#     self.forStm = forStm
+class StmForstm(Stm):
+  def __init__(self, forStm):
+    self.forStm = forStm
     
-#   def accept(self, visitor):
-#     pass
+  def accept(self, visitor):
+    return visitor.visitStmForstm(self)
 
-# class StmReturnstm(Stm):
-#   def __init__(self, returnStm):
-#     self.returnStm = returnStm
+class StmReturnstm(Stm):
+  def __init__(self, returnStm):
+    self.returnStm = returnStm
     
-#   def accept(self, visitor):
-#     pass
+  def accept(self, visitor):
+    return visitor.visitStmReturnstm(self)
 
 class ReturnStm(metaclass = ABCMeta):
   @abstractmethod
@@ -199,7 +220,7 @@ class Return(ReturnStm):
     self.expBinaria = expBinaria
     
   def accept(self, visitor):
-    pass
+    return visitor.visitReturn(self)
 
 class DeclarationVarShort(metaclass = ABCMeta):
   @abstractmethod
@@ -212,7 +233,7 @@ class DeclaraShort(DeclarationVarShort):
     self.expBinaria = expBinaria
     
   def accept(self, visitor):
-    pass
+    return visitor.visitDeclaraShort(self)
 
 class IfStm(metaclass = ABCMeta):
   @abstractmethod
@@ -226,7 +247,7 @@ class IfListaExp(IfStm):
     self.ifStm2 = ifStm2
     
   def accept(self, visitor):
-    pass
+    return visitor.visitIfListaExp(self)
 
 class IfStm2(metaclass = ABCMeta):
   @abstractmethod
@@ -238,7 +259,7 @@ class IfListaExp2(IfStm2):
     self.corpo = corpo
     
   def accept(self, visitor):
-    pass
+    return visitor.visitIfListaExp2(self)
 
 class ForStm(metaclass = ABCMeta):
   @abstractmethod
@@ -251,7 +272,7 @@ class ForCorpo(ForStm):
     self.corpo = corpo
     
   def accept(self, visitor):
-    pass
+    return visitor.visitForCorpo(self)
 
 class ForListaExp(ForStm):
   def __init__(self, listaExp1, listaExp2, listaExp3, corpo):
@@ -261,7 +282,7 @@ class ForListaExp(ForStm):
     self.corpo = corpo
     
   def accept(self, visitor):
-    pass
+    return visitor.visitForListaExp(self)
 
 class tipo(metaclass = ABCMeta):
   @abstractmethod
@@ -273,36 +294,35 @@ class tipoArray(tipo):
     self.array = array
 
   def accept(self, visitor):
-    pass
+    return visitor.visitTipoArray(self)
 
 class tipoInt(tipo):
-  def __init__(self, intValue):
-    self.intValue = intValue
+  def __init__(self, intTipo):
+    self.intTipo = intTipo
 
   def accept(self, visitor):
-    pass
+    return visitor.visitTipoInt(self)
 
 class tipoFloat(tipo):
-  def __init__(self, floatValue):
-    self.floatValue = floatValue
+  def __init__(self, floatTipo):
+    self.floatTipo = floatTipo
 
   def accept(self, visitor):
-    pass
+    return visitor.visitTipoFloat(self)
 
 class tipoBool(tipo):
-  def __init__(self, boolValue):
-    self.boolValue = boolValue
+  def __init__(self, boolTipo):
+    self.boolTipo = boolTipo
 
   def accept(self, visitor):
-    pass
+    return visitor.visitTipoBool(self)
 
 class tipoString(tipo):
-  def __init__(self, stringValue):
-    self.stringValue = stringValue
+  def __init__(self, stringTipo):
+    self.stringTipo = stringTipo
 
   def accept(self, visitor):
-    pass
-#tipo, operatribuicao, operadorbinario, terminal, será colocado igual o exemplo de "program" em SUE?
+    return visitor.visitTipoString(self)
 
 class Array(metaclass = ABCMeta):
   @abstractmethod
@@ -315,7 +335,7 @@ class ArraySimples(Array):
     self.tipo = tipo
     
   def accept(self, visitor):
-    pass
+    return visitor.visitArraySimples(self)
 
 class ArrayComposto(Array):
   def __init__(self, listaExp, tipo, params):
@@ -324,7 +344,7 @@ class ArrayComposto(Array):
     self.params = params 
     
   def accept(self, visitor):
-    pass
+    return visitor.visitArrayComposto(self)
 
 class ListaExp(metaclass = ABCMeta):
   @abstractmethod
@@ -336,14 +356,14 @@ class ListaExpBinaria(ListaExp):
     self.expBinaria = expBinaria
     
   def accept(self, visitor):
-    pass
+    return visitor.visitListaExpBinaria(self)
 
 class ListaExpAtribui(ListaExp):
   def __init__(self, expAtribui):
     self.expAtribui = expAtribui
     
   def accept(self, visitor):
-    pass
+    return visitor.visitListaExpAtribui(self)
 
 class ExpBinaria(metaclass = ABCMeta):
   @abstractmethod
@@ -351,15 +371,13 @@ class ExpBinaria(metaclass = ABCMeta):
     pass
 
 class AbreExpBinariaTerminalFecha(ExpBinaria):
-  def __init__(self, abre, terminal, operadorBinario, expBinaria, fecha):
-    self.abre = abre
+  def __init__(self, terminal, operadorBinario, expBinaria):
     self.terminal = terminal
     self.operadorBinario = operadorBinario
     self.expBinaria = expBinaria
-    self.fecha = fecha
     
   def accept(self, visitor):
-    pass
+    return visitor.visitAbreExpBinariaTerminalFecha(self)
 
 class ExpBinariaTerminal(ExpBinaria):
   def __init__(self, terminal, operadorBinario, expBinaria):
@@ -368,67 +386,21 @@ class ExpBinariaTerminal(ExpBinaria):
     self.expBinaria = expBinaria
     
   def accept(self, visitor):
-    pass
+    return visitor.visitExpBinariaTerminal(self)
 
 class ExpBinariaApenasTerminal(ExpBinaria):
   def __init__(self, terminal):
     self.terminal = terminal
     
   def accept(self, visitor):
-    pass
+    return visitor.visitExpBinariaApenasTerminal(self)
 
 class ExpBinariaCall(ExpBinaria):
   def __init__(self, call):
     self.call = call
     
   def accept(self, visitor):
-    pass
-
-class AbreExpBinaria(metaclass = ABCMeta):
-  @abstractmethod
-  def accept(self, visitor):
-    pass
-
-class abreParen(AbreExpBinaria):
-  def __init__(self, lParen):
-    self.lParen = lParen
-  def accept(self, visitor):
-    pass
-
-class abreChave(AbreExpBinaria):
-  def __init__(self, lChave):
-    self.lChave = lChave
-  def accept(self, visitor):
-    pass
-
-class abreColch(AbreExpBinaria):
-  def __init__(self, lColch):
-    self.lColch = lColch
-  def accept(self, visitor):
-    pass
-
-class FechaExpBinaria(metaclass = ABCMeta):
-  @abstractmethod
-  def accept(self, visitor):
-    pass
-
-class fechaParen(FechaExpBinaria):
-  def __init__(self, rParen):
-    self.rParen = rParen
-  def accept(self, visitor):
-    pass
-
-class fechaChave(FechaExpBinaria):
-  def __init__(self, rChave):
-    self.rChave = rChave
-  def accept(self, visitor):
-    pass
-
-class fechaColch(FechaExpBinaria):
-  def __init__(self, rColch):
-    self.rColch = rColch
-  def accept(self, visitor):
-    pass
+    return visitor.visitExpBinariaCall(self)
 
 class ExpAtribui(metaclass = ABCMeta):
   @abstractmethod
@@ -442,7 +414,7 @@ class ExpAtribuiConcreta(ExpAtribui):
     self.expBinaria = expBinaria
     
   def accept(self, visitor):
-    pass
+    return visitor.visitExpAtribuiConcreta(self)
 
 class operadorAtribuicao(metaclass = ABCMeta):
   @abstractmethod
@@ -454,49 +426,49 @@ class atribuicao(operadorAtribuicao):
     self.atribuicao = atribuicao
 
   def accept(self, visitor):
-    pass
+    return visitor.visitAtribuicao(self)
 
 class atribuicaoSoma(operadorAtribuicao):
   def __init__(self, atribuicaoSoma):
     self.atribuicaoSoma = atribuicaoSoma
 
   def accept(self, visitor):
-    pass
+    return visitor.visitAtribuicaoSoma(self)
 
 class atribuicaoSub(operadorAtribuicao):
   def __init__(self, atribuicaoSub):
     self.atribuicaoSub = atribuicaoSub
 
   def accept(self, visitor):
-    pass
+    return visitor.visitAtribuicaoSub(self)
 
 class atribuicaoMul(operadorAtribuicao):
   def __init__(self, atribuicaoMul):
     self.atribuicaoMul = atribuicaoMul
 
   def accept(self, visitor):
-    pass
+    return visitor.visitAtribuicaoMul(self)
     
 class atribuicaoDiv(operadorAtribuicao):
   def __init__(self, atribuicaoDiv):
     self.atribuicaoDiv = atribuicaoDiv
 
   def accept(self, visitor):
-    pass
+    return visitor.visitAtribuicaoDiv(self)
 
 class atribuicaoMod(operadorAtribuicao):
   def __init__(self, atribuicaoMod):
     self.atribuicaoMod = atribuicaoMod
 
   def accept(self, visitor):
-    pass
+    return visitor.visitAtribuicaoMod(self)
 
 class atribuicaoPonto(operadorAtribuicao):
   def __init__(self, atribuicaoPonto):
     self.atribuicaoPonto = atribuicaoPonto
 
   def accept(self, visitor):
-    pass
+    return visitor.visitAtribuicaoPonto(self)
 
 class operadorBinario(metaclass = ABCMeta):
   @abstractmethod
@@ -508,91 +480,91 @@ class operadorSoma(operadorBinario):
     self.soma = soma
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorSoma(self)
 
 class operadorAsterisco(operadorBinario):
   def __init__(self, asterisco):
     self.asterisco = asterisco
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorAsterisco(self)
 
 class operadorModulo(operadorBinario):
   def __init__(self, mod):
     self.mod = mod
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorModulo(self)
 
 class operadorDivisao(operadorBinario):
   def __init__(self, div):
     self.div = div
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorDiv(self)
 
 class operadorSubtracao(operadorBinario):
   def __init__(self, sub):
     self.sub = sub
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorSub(self)
 
 class operadorMaiorQue(operadorBinario):
   def __init__(self, maior):
     self.maior = maior
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorMaior(self)
 
 class operadorMenorQue(operadorBinario):
   def __init__(self, menor):
     self.menor = menor
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorMenor(self)
 
 class operadorMaiorIgual(operadorBinario):
   def __init__(self, maiorigual):
     self.maiorigual = maiorigual
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorMaiorIgual(self)
 
 class operadorMenorIgual(operadorBinario):
   def __init__(self, menorigual):
     self.menorigual = menorigual
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorMenorIgual(self)
 
 class operadorIgual(operadorBinario):
   def __init__(self, igual):
     self.igual = igual
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorIgual(self)
 
 class operadorDiferente(operadorBinario):
   def __init__(self, dif):
     self.dif = dif
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorDif(self)
 
 class operadorConjuncao(operadorBinario):
   def __init__(self, conj):
     self.conj = conj
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorConj(self)
 
 class operadorDisjuncao(operadorBinario):
   def __init__(self, dis):
     self.dis = dis
 
   def accept(self, visitor):
-    pass
+    return visitor.visitOperadorDis(self)
 
 class terminal(metaclass = ABCMeta):
   @abstractmethod
@@ -603,31 +575,31 @@ class terminalInt(terminal):
   def __init__(self, intValue):
     self.intValue = intValue
   def accept(self, visitor):
-    pass
+    return visitor.visitTerminalInt(self)
 
 class terminalFloat(terminal):
   def __init__(self, floatValue):
     self.floatValue = floatValue
   def accept(self, visitor):
-    pass
+    return visitor.visitTerminalFloat(self)
 
 class terminalID(terminal):
   def __init__(self, id):
     self.id = id
   def accept(self, visitor):
-    pass
+    return visitor.visitTerminalID(self)
 
 class terminalString(terminal):
   def __init__(self, stringValue):
-    self.stringValues = stringValue
+    self.stringValue = stringValue
   def accept(self, visitor):
-    pass
+    return visitor.visitTerminalString(self)
 
 class terminalBool(terminal):
   def __init__(self, boolValue):
     self.boolValue = boolValue
   def accept(self, visitor):
-    pass
+    return visitor.visitTerminalBool(self)
 
 class Call(metaclass = ABCMeta):
   @abstractmethod
@@ -640,7 +612,7 @@ class CallId(Call):
     self.params = params
     
   def accept(self, visitor):
-    pass
+    return visitor.visitCallId(self)
 
 class Params(metaclass = ABCMeta):
   @abstractmethod
@@ -652,7 +624,7 @@ class ParamsLista(Params):
     self.listaexp = listaexp
     
   def accept(self, visitor):
-    pass
+    return visitor.visitParamsLista(self)
 
 class ParamsListaParams(Params):
   def __init__(self, listaexp, params):
@@ -660,4 +632,4 @@ class ParamsListaParams(Params):
     self.params = params
     
   def accept(self, visitor):
-    pass
+    return visitor.visitParamsListaParams(self)

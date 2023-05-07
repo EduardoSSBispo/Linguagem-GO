@@ -46,8 +46,8 @@ reservadas = {
 }
 
 tokens = [
-  'SOMA', 'SUBTRACAO', 'ASTERISCO', 'DIVISAO', 'ID', 'INTEIRO', 'FLUTUANTE',
-  'FLUTUANTEDOBRO', 'IGUAL', 'DIFERENTE', 'MAIORQUE', 'MENORQUE', 'MAIORIGUAL',
+  'SOMA', 'SUBTRACAO', 'ASTERISCO', 'DIVISAO', 'ID', 'INTEIRO', 'FLUTUANTE', 
+  'IGUAL', 'DIFERENTE', 'MAIORQUE', 'MENORQUE', 'MAIORIGUAL',
   'MENORIGUAL', 'CONJUNCAO', 'MODULO', 'DISJUNCAO', 'ATRIBUICAO',
   'ATRIBUICAOSOMA', 'ATRIBUICAOMULT', 'ATRIBUICAOSUB', 'ATRIBUICAODIV',
   'ATRIBUICAOMOD', 'ATRIBUICAOPONTO', 'LPAREN', 'RPAREN', 'LCHAVE', 'RCHAVE',
@@ -190,8 +190,5 @@ def t_COMENTARIO(t):
 lexer = lex.lex()
 #lexer.input('for j:= 0; j<= 2; j--{ -38.2 - 123}')
 lexer.input(
-  'func mais(a int, b int) int {\n a += 5;  return a + b;\n}\nfunc main() {\n if 5 > 6{ shift := 9;}  res += mais(1, 2);\n   Println("1+2=", res);\n}'
+  'func mais(a int, b int) int {\n a += 5;  return a + b;\n}\nfunc main() {\n if 5 > 6{ shift := 9;}  res += mais(1, 2);\n   Println("1+2=", res);\nfor j := 7; j <= 9; j=j+1 {\nPrintln(j);\n}}'
 )
-
-#for tok in lexer:
-#  print(tok.value, tok.type)
