@@ -1,6 +1,5 @@
 import ply.lex as lex
 
-
 def space_counter(token):
   spaces = 0
   for c in token.value:
@@ -105,7 +104,6 @@ def t_breakline(t):
 
 def t_idstate_blankline(t):
   r'([ \t]+)\n'  #Reconhece uma linha em branco
-  # print('t_idstate_blankline')
   pass
 
 
@@ -119,11 +117,9 @@ def t_idstate_linewithcode(t):
     stack.pop()
     t.type = 'DEDENT'
     t.lexer.begin('dedstate')
-    #return t
   elif n_spaces > stack[-1]:
     stack.append(n_spaces)
     t.type = 'IDENT'
-    #return t
   elif n_spaces == 0:
     t.lexer.skip(-1)
 
@@ -135,7 +131,6 @@ def t_dedstate_linewithdedent(t):
     t.lexer.skip(-len(t.value))
     stack.pop()
     t.type = 'DEDENT'
-    #return t
   elif n_spaces >= stack[-1]:
     t.lexer.begin('INITIAL')
     if n_spaces > stack[-1]:
@@ -143,52 +138,39 @@ def t_dedstate_linewithdedent(t):
     elif n_spaces == 0:  # Se o elemento começar com uma palavra
       t.lexer.skip(-1)
 
-
 def t_error(t):
   print("ERROR in INITIAL state")
   print(t.value)
   t.lexer.skip(1)
 
-
 def t_idstate_error(t):
   print("ERROR in idstate state")
   t.lexer.skip(1)
 
-
 def t_dedstate_error(t):
   print("ERROR in dedstate state")
   t.lexer.skip(1)
-
 
 def t_FLUTUANTE(t):
   r'[-]?[0-9]+[.][0-9]+'
   t.value = float(t.value)
   return t
 
-
 def t_INTEIRO(t):
   r'[-]?[0-9]+'
   t.value = int(t.value)
   return t
-
 
 def t_ID(t):
   r'[_]{0,}[a-zA-Z][a-zA-Z0-9_]*'
   t.type = reservadas.get(t.value, 'ID')
   return t
 
-
 def t_COMENTARIO(t):
   r'(//.*)|(/\*(.|\n)*?\*/)'
   pass
 
-
-#def t_newline(t):
-#   r'\n+'
-#  t.lexer.lineno += len(t.value)
-
 lexer = lex.lex()
-#lexer.input('for j:= 0; j<= 2; j--{ -38.2 - 123}')
 lexer.input(
   'func mais(a int, b int) int {\n a += 5;  return a + b;\n}\nfunc main() {\n if 5 > 6{ shift := 9;}  res += mais(1, 2);\n   Println("1+2=", res);\nfor j := 7; j <= 9; j=j+1 {\nPrintln(j);\n}}'
 )

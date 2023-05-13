@@ -15,10 +15,8 @@ def p_programa(p):
   '''programa : declaration 
               | programa declaration'''
   if (len(p) == 2):
-    #p[0] = [p[1]] + [p[2]]
     p[0] = sa.ProgramaConcreto1(p[1])
   else:
-    #p[0] = [p[1]]
     p[0] = sa.ProgramaConcreto2(p[1], p[2])
   
 def p_declaration(p):
